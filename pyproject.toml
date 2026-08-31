@@ -1,0 +1,28 @@
+[project]
+name = "orderflow-serverless"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Omar2709", email = "omarrglopez@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "aws-lambda-powertools>=3.34.0",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+]
+
+[project.scripts]
+orderflow-serverless = "orderflow_serverless:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.5",
+]

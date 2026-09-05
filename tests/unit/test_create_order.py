@@ -26,6 +26,7 @@ def test_create_order_calculates_total():
     assert order.total == Decimal("31.00")
     assert order.order_id
 
+
 def test_create_order_with_multiple_items():
     use_case = CreateOrder()
 

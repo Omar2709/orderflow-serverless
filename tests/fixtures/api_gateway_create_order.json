@@ -1,15 +1,16 @@
 {
-  "resource": "/orders",
-  "path": "/orders",
-  "httpMethod": "POST",
+  "version": "2.0",
+  "routeKey": "POST /orders",
+  "rawPath": "/orders",
   "headers": {
     "content-type": "application/json"
   },
-  "queryStringParameters": null,
-  "pathParameters": null,
   "requestContext": {
-    "requestId": "test-request-id",
-    "stage": "test"
+    "http": {
+      "method": "POST",
+      "path": "/orders"
+    },
+    "requestId": "test-request-id"
   },
   "body": "{\"customer_id\":\"cus_123\",\"currency\":\"USD\",\"items\":[{\"product_id\":\"prod_1\",\"quantity\":2,\"unit_price\":\"15.50\"}]}",
   "isBase64Encoded": false

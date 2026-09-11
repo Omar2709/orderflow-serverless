@@ -1,8 +1,10 @@
 import json
 
-from orderflow.application.create_order import CreateOrder
-from orderflow.domain.order import Order
+from pydantic import ValidationError
 
+from orderflow.application.create_order import CreateOrder
+from orderflow.contracts.order import CreateOrderRequest
+from orderflow.domain.order import Order
 
 create_order = CreateOrder()
 
@@ -25,12 +27,19 @@ def lambda_handler(event, context):
         )
 
     try:
-        order = create_order.execute(data)
-    except KeyError as exc:
+        request = CreateOrderRequest.model_validate(data)
+    except ValidationError as exc:
         return _response(
             400,
-            {"error": f"missing field: {exc.args[0]}"},
+            {
+                "error": "validation error",
+                "details": exc.errors(include_url=False),
+            },
         )
+
+    order = create_order.execute(
+        request.model_dump(mode="json")
+    )
 
     return _response(
         201,

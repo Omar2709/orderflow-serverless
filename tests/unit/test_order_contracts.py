@@ -93,3 +93,19 @@ def test_create_order_request_rejects_string_quantity():
                 ],
             }
         )
+
+def test_create_order_request_rejects_blank_customer_id():
+    with pytest.raises(ValidationError):
+        CreateOrderRequest.model_validate(
+            {
+                "customer_id": "   ",
+                "currency": "USD",
+                "items": [
+                    {
+                        "product_id": "prod_1",
+                        "quantity": 2,
+                        "unit_price": "15.50",
+                    }
+                ],
+            }
+        )

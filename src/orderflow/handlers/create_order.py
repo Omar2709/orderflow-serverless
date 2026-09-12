@@ -34,9 +34,7 @@ def lambda_handler(event, context):
     try:
         request = CreateOrderRequest.model_validate(data)
 
-        order = create_order.execute(
-            request.model_dump(mode="json")
-        )
+        order = create_order.execute(request.model_dump(mode="json"))
 
     except ValidationError as exc:
         return _response(
@@ -61,6 +59,7 @@ def lambda_handler(event, context):
         correlation_id,
     )
 
+
 def _get_correlation_id(event: dict) -> str:
     headers = event.get("headers") or {}
 
@@ -71,6 +70,7 @@ def _get_correlation_id(event: dict) -> str:
 
     return str(uuid4())
 
+
 def _validation_errors(exc: ValidationError) -> list[dict]:
     return [
         {
@@ -80,6 +80,7 @@ def _validation_errors(exc: ValidationError) -> list[dict]:
         }
         for error in exc.errors(include_url=False)
     ]
+
 
 def _order_to_dict(order: Order) -> dict:
     return {
@@ -98,6 +99,7 @@ def _order_to_dict(order: Order) -> dict:
         ],
     }
 
+
 def _response(
     status_code: int,
     body: dict,
@@ -111,4 +113,3 @@ def _response(
         },
         "body": json.dumps(body),
     }
-    

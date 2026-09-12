@@ -94,6 +94,7 @@ def test_create_order_request_rejects_string_quantity():
             }
         )
 
+
 def test_create_order_request_rejects_blank_customer_id():
     with pytest.raises(ValidationError):
         CreateOrderRequest.model_validate(

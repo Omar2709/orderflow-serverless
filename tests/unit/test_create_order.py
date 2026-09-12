@@ -43,7 +43,7 @@ def test_create_order_with_multiple_items():
                 "product_id": "prod_2",
                 "quantity": 3,
                 "unit_price": "4.25",
-            }
+            },
         ],
     }
 

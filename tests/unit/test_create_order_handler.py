@@ -316,3 +316,15 @@ def test_create_order_returns_generic_500_on_unexpected_error(
     }
 
     assert "database exploded" not in response["body"]
+
+
+def test_create_order_accepts_mixed_case_correlation_id_header():
+    event = load_event()
+
+    event["headers"].pop("x-correlation-id", None)
+    event["headers"]["X-Correlation-ID"] = "mixed-case-123"
+
+    response = lambda_handler(event, None)
+
+    assert response["statusCode"] == 201
+    assert response["headers"]["x-correlation-id"] == "mixed-case-123"

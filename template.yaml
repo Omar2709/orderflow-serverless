@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Description: OrderFlow serverless order processing API
+
+Globals:
+  Function:
+    Runtime: python3.13
+    Architectures:
+      - x86_64
+    MemorySize: 256
+    Timeout: 10
+
+Resources:
+  CreateOrderExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  OrderFlowHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: "$default"
+
+  CreateOrderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: orderflow.handlers.create_order.lambda_handler
+      Role: !GetAtt CreateOrderExecutionRole.Arn
+
+      Events:
+        CreateOrder:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref OrderFlowHttpApi
+            Path: /orders
+            Method: POST
+            PayloadFormatVersion: "2.0"
+
+Outputs:
+  OrderFlowApiUrl:
+    Description: OrderFlow HTTP API base URL
+    Value: !Sub "https://${OrderFlowHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}"
+  

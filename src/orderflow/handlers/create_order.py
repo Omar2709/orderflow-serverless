@@ -63,7 +63,9 @@ def lambda_handler(event, context):
 def _get_correlation_id(event: dict) -> str:
     headers = event.get("headers") or {}
 
-    correlation_id = headers.get("x-correlation-id")
+    normalized_headers = {str(key).lower(): value for key, value in headers.items()}
+
+    correlation_id = normalized_headers.get("x-correlation-id")
 
     if correlation_id:
         return correlation_id
